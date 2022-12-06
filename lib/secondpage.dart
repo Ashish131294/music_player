@@ -56,7 +56,7 @@ class _secondpageState extends State<secondpage> {
               child: ElevatedButton(
                   onPressed: () async {
                     if (play) {
-                      await player.stop();
+                      await player.stop();//next and stop
                     } else {
                       String path = widget.songs[widget.index].data;
                       await player.play(DeviceFileSource(path));
