@@ -13,23 +13,20 @@ class secondpage extends StatefulWidget {
 }
 
 class _secondpageState extends State<secondpage> {
-
   final player = AudioPlayer();
   double current_time = 0;
-  bool play=false;
-
+  bool play = false;
 
   @override
   void initState() {
     super.initState();
     print(widget.songs[widget.index]);
-    player.onPositionChanged.listen((Duration  p)  {
-    print('Current position: $p');
-    setState(() {
-      current_time =p.inMilliseconds.toDouble();
+    player.onPositionChanged.listen((Duration p) {
+      print('Current position: $p');
+      setState(() {
+        current_time = p.inMilliseconds.toDouble();
+      });
     });
-
-  });
   }
 
   @override
@@ -44,9 +41,9 @@ class _secondpageState extends State<secondpage> {
           child: Text("${widget.songs[widget.index].title}"),
         ),
         Slider(
-          value: current_time,
           min: 0,
           max: widget.songs[widget.index].duration!.toDouble(),
+          value: current_time,
           onChanged: (value) async {
             await player.seek(Duration(milliseconds: value.toInt()));
           },
@@ -57,8 +54,15 @@ class _secondpageState extends State<secondpage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    if (play) {
+                      await player.stop();
+                    } else {
+                      String path = widget.songs[widget.index].data;
+                      await player.play(DeviceFileSource(path));
+                    }
                     setState(() {
+                      play = !play;
                       widget.index--;
                     });
                   },
@@ -66,16 +70,33 @@ class _secondpageState extends State<secondpage> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(onPressed: () {
-
-
-              }, child: play?Icon(Icons.pause):Icon(Icons.play_arrow)),
+              child: ElevatedButton(
+                  onPressed: () async {
+                    if (play) {
+                      await player.pause();
+                    } else {
+                      String path = widget.songs[widget.index].data;
+                      await player.play(DeviceFileSource(path));
+                    }
+                    setState(() {
+                      play = !play;
+                    });
+                  },
+                  child: play ? Icon(Icons.pause) : Icon(Icons.play_arrow)),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    if (play) {
+                      await player.stop();
+                    } else {
+                      String path = widget.songs[widget.index].data;
+                      await player.play(DeviceFileSource(path));
+                    }
+
                     setState(() {
+                      play = !play;
                       widget.index++;
                     });
                   },

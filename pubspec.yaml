@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   audioplayers:
   on_audio_query:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:
